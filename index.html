@@ -9,33 +9,140 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--canvas:#FCFCFD;--surface:#FFFFFF;--soft:#F3F6F5;--line:#EBEDF0;--ink:#0E1116;--muted:#6E7681;--accent:#1F6F5C;--even:#DE8A34;--bad:#C63D2F;--r-sm:6px;--r-md:10px;--r-lg:14px;--shadow:0 4px 6px -2px rgba(14,17,22,.04),0 14px 26px -10px rgba(14,17,22,.10);--ease:cubic-bezier(.2,.8,.2,1)}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}body{min-height:100vh;background:var(--canvas);color:var(--ink);font-family:"IBM Plex Sans Arabic",system-ui,sans-serif;font-feature-settings:"tnum" 1,"lnum" 1;-webkit-font-smoothing:antialiased}button{font:inherit;color:inherit;cursor:pointer;border:none;background:none}:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:var(--r-sm)}.hidden{display:none!important}.wrap{max-width:660px;margin-inline:auto;padding:0 20px 100px}.hero{padding:44px 0 26px}.eyebrow{display:inline-block;font-size:12px;font-weight:600;color:var(--accent);background:var(--soft);padding:5px 12px;border-radius:var(--r-sm);margin-bottom:16px}h1{font-weight:700;font-size:clamp(30px,7.8vw,40px);line-height:1.32;letter-spacing:-.025em}.sub{color:var(--muted);font-size:15px;line-height:1.75;margin-top:10px;max-width:42ch}.index{display:flex;flex-direction:column;gap:10px}.exam{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:20px;transition:box-shadow .22s var(--ease),border-color .22s var(--ease),transform .22s var(--ease)}.exam:hover{border-color:#DDE1E5;transform:translateY(-2px);box-shadow:var(--shadow)}.exam-top{display:flex;align-items:center;gap:16px}.exam-text{flex:1;min-width:0}.exam h2{font-weight:600;font-size:17.5px;letter-spacing:-.015em}.exam .desc{color:var(--muted);font-size:13px;margin-top:3px}.score{flex:none;display:flex;flex-direction:column;align-items:center;gap:5px}.dial{position:relative;width:54px;height:54px;display:grid;place-items:center;--ring:var(--accent)}.dial .arc{position:absolute;inset:0;border-radius:50%;background:conic-gradient(var(--ring) calc(var(--p)*3.6deg),var(--line) 0);-webkit-mask:radial-gradient(farthest-side,transparent 70%,#000 71%);mask:radial-gradient(farthest-side,transparent 70%,#000 71%)}.dial .pct{position:relative;z-index:1;font-size:14px;font-weight:700;color:var(--ink);line-height:1;display:flex;align-items:baseline;gap:1px}.dial .pct i{font-style:normal;font-size:9px;font-weight:500;color:var(--muted)}.score-label{font-size:10.5px;font-weight:500;color:var(--muted)}.dial.even{--ring:var(--even)}.dial.low{--ring:var(--bad)}.dial.empty{--ring:var(--line)}.dial.empty .pct{color:var(--muted);font-weight:500}.track{height:6px;margin-top:16px;border-radius:99px;overflow:hidden;background:var(--line)}.bar{display:block;height:100%;background:var(--accent);border-radius:99px}.meta{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin-top:14px;font-size:12.5px;color:var(--muted)}.meta span{padding:4px 10px;background:var(--soft);border-radius:var(--r-sm)}.meta b{color:var(--ink);font-weight:600}.cta{display:block;width:100%;margin-top:16px;padding:13px;border-radius:var(--r-md);background:var(--accent);color:#fff;font-weight:600;font-size:14.5px;box-shadow:0 1px 2px rgba(14,17,22,.1)}.cta.ghost{background:transparent;color:var(--accent);border:1px solid var(--line);box-shadow:none}.cta.danger{background:transparent;color:var(--bad);border:1px solid var(--line);box-shadow:none}.loading{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:22px;color:var(--muted);font-size:14px}.quiz-head{padding:28px 0 18px;position:sticky;top:0;background:rgba(252,252,253,.96);backdrop-filter:blur(10px);z-index:20}.back{display:inline-flex;align-items:center;gap:7px;color:var(--accent);font-size:13px;font-weight:600;margin-bottom:12px}.quiz-title{font-size:24px;font-weight:700;line-height:1.4}.quiz-stat{font-size:13px;color:var(--muted);margin-top:5px}.quiz-list{display:flex;flex-direction:column;gap:12px}.qcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:24px}.qnum{display:inline-block;font-size:12px;font-weight:600;color:var(--accent);background:var(--soft);padding:4px 10px;border-radius:var(--r-sm);margin-bottom:16px}.qtext{font-size:18px;line-height:1.8;font-weight:600;letter-spacing:-.01em;white-space:pre-line}.qimg{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:var(--r-md);margin-top:18px}.choices{display:flex;flex-direction:column;gap:8px;margin-top:22px}.choice{display:flex;align-items:center;gap:14px;width:100%;text-align:right;padding:14px 15px;border:1px solid var(--line);border-radius:var(--r-md);font-size:15px;transition:all .18s var(--ease)}.choice:hover{border-color:var(--accent);background:var(--soft)}.tag{flex:none;display:grid;place-items:center;width:26px;height:26px;border-radius:7px;background:var(--soft);font-size:12px;font-weight:600;color:var(--muted)}.choice.selected{border-color:var(--accent);background:rgba(31,111,92,.05)}.choice.selected .tag{background:var(--accent);color:#fff}.choice.correct{border-color:var(--accent);background:rgba(31,111,92,.08);color:#174f42}.choice.correct .tag{background:var(--accent);color:#fff}.choice.wrong{border-color:var(--bad);background:rgba(198,61,47,.07);color:#8f2c23}.choice.wrong .tag{background:var(--bad);color:#fff}.choice:disabled{cursor:default}.review-note{font-size:12px;color:var(--muted);margin-top:12px}.quiz-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}.quiz-actions .cta{margin-top:0}.result{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:22px;margin:0 0 14px;box-shadow:var(--shadow)}.result-kicker{font-size:12px;font-weight:600;color:var(--muted)}.result-score{font-size:42px;font-weight:700;line-height:1.15;margin-top:4px;color:var(--accent)}.result-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}.result-box{background:var(--soft);border-radius:var(--r-md);padding:12px;text-align:center;font-size:12px;color:var(--muted)}.result-box b{display:block;color:var(--ink);font-size:20px;margin-bottom:1px}.section-title{font-size:12px;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:14px;margin:50px 0 14px}.section-title::after{content:"";flex:1;height:1px;background:var(--line)}@media(max-width:520px){.wrap{padding-inline:16px}.exam{padding:18px}.qcard{padding:20px}.result-grid{grid-template-columns:repeat(3,1fr)}.quiz-actions{grid-template-columns:1fr}.qtext{font-size:17px}}
+:root{
+  --canvas:#FCFCFD;--surface:#FFFFFF;--soft:#F3F6F5;--line:#EBEDF0;
+  --ink:#0E1116;--muted:#6E7681;--accent:#1F6F5C;--even:#DE8A34;--bad:#C63D2F;
+  --r-sm:6px;--r-md:10px;--r-lg:14px;
+  --shadow:0 4px 6px -2px rgba(14,17,22,.04),0 14px 26px -10px rgba(14,17,22,.10);
+  --ease:cubic-bezier(.2,.8,.2,1)
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{min-height:100vh;background:var(--canvas);color:var(--ink);font-family:"IBM Plex Sans Arabic",system-ui,sans-serif;font-feature-settings:"tnum" 1,"lnum" 1;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer;border:none;background:none}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:var(--r-sm)}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition-duration:.01ms!important;scroll-behavior:auto!important}}
+.hidden{display:none!important}
+.wrap{max-width:660px;margin-inline:auto;padding:0 20px 100px}
+.hero{padding:44px 0 26px}
+.eyebrow{display:inline-block;font-size:12px;font-weight:600;color:var(--accent);background:var(--soft);padding:5px 12px;border-radius:var(--r-sm);margin-bottom:16px}
+h1{font-weight:700;font-size:clamp(30px,7.8vw,40px);line-height:1.32;letter-spacing:-.025em}
+.sub{color:var(--muted);font-size:15px;line-height:1.75;margin-top:10px;max-width:42ch}
+.index{display:flex;flex-direction:column;gap:10px}
+.exam{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:20px;transition:box-shadow .22s var(--ease),border-color .22s var(--ease),transform .22s var(--ease)}
+.exam:hover{border-color:#DDE1E5;transform:translateY(-2px);box-shadow:var(--shadow)}
+.exam-top{display:flex;align-items:center;gap:16px}
+.exam-text{flex:1;min-width:0}
+.exam h2{font-weight:600;font-size:17.5px;letter-spacing:-.015em}
+.exam .desc{color:var(--muted);font-size:13px;margin-top:3px}
+.score{flex:none;display:flex;flex-direction:column;align-items:center;gap:5px}
+.dial{position:relative;width:54px;height:54px;display:grid;place-items:center;--ring:var(--accent)}
+.dial .arc{position:absolute;inset:0;border-radius:50%;background:conic-gradient(var(--ring) calc(var(--p)*3.6deg),var(--line) 0);-webkit-mask:radial-gradient(farthest-side,transparent 70%,#000 71%);mask:radial-gradient(farthest-side,transparent 70%,#000 71%);transition:background .6s var(--ease)}
+.dial .pct{position:relative;z-index:1;font-size:14px;font-weight:700;color:var(--ink);line-height:1;display:flex;align-items:baseline;gap:1px}
+.dial .pct i{font-style:normal;font-size:9px;font-weight:500;color:var(--muted)}
+.score-label{font-size:10.5px;font-weight:500;color:var(--muted);letter-spacing:.02em}
+.dial.even{--ring:var(--even)}.dial.low{--ring:var(--bad)}.dial.empty{--ring:var(--line)}.dial.empty .pct{color:var(--muted);font-weight:500}
+.track{height:6px;margin-top:16px;border-radius:99px;overflow:hidden;background:var(--line)}
+.bar{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .6s var(--ease)}
+.meta{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin-top:14px;font-size:12.5px;color:var(--muted)}
+.meta span{padding:4px 10px;background:var(--soft);border-radius:var(--r-sm)}
+.meta b{color:var(--ink);font-weight:600}
+.cta{display:block;width:100%;margin-top:16px;padding:13px;border-radius:var(--r-md);background:var(--accent);color:#fff;font-weight:600;font-size:14.5px;box-shadow:0 1px 2px rgba(14,17,22,.1);transition:filter .2s var(--ease),transform .12s var(--ease)}
+.cta:hover{filter:brightness(1.08)}.cta:active{transform:scale(.99)}
+.cta.ghost{background:transparent;color:var(--accent);border:1px solid var(--line);box-shadow:none}
+.cta.ghost:hover{border-color:var(--accent);background:var(--soft);filter:none}
+.cta.danger{background:transparent;color:var(--bad);border:1px solid var(--line);box-shadow:none}
+.card-actions{display:grid;grid-template-columns:1fr;gap:8px;margin-top:16px}
+.card-actions .cta{margin-top:0}
+.loading{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:22px;color:var(--muted);font-size:14px}
+.quiz-head{padding:28px 0 18px;position:sticky;top:0;background:rgba(252,252,253,.96);backdrop-filter:blur(10px);z-index:20}
+.back{display:inline-flex;align-items:center;gap:7px;color:var(--accent);font-size:13px;font-weight:600;margin-bottom:12px}
+.quiz-title{font-size:24px;font-weight:700;line-height:1.4}
+.quiz-stat{font-size:13px;color:var(--muted);margin-top:5px}
+.quiz-list{display:flex;flex-direction:column;gap:12px}
+.qcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:24px}
+.qnum{display:inline-block;font-size:12px;font-weight:600;color:var(--accent);background:var(--soft);padding:4px 10px;border-radius:var(--r-sm);margin-bottom:16px}
+.qtext{font-size:18px;line-height:1.8;font-weight:600;letter-spacing:-.01em;white-space:pre-line}
+.qimg{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:var(--r-md);margin-top:18px}
+.choices{display:flex;flex-direction:column;gap:8px;margin-top:22px}
+.choice{display:flex;align-items:center;gap:14px;width:100%;text-align:right;padding:14px 15px;border:1px solid var(--line);border-radius:var(--r-md);font-size:15px;transition:all .18s var(--ease)}
+.choice:hover{border-color:var(--accent);background:var(--soft)}
+.tag{flex:none;display:grid;place-items:center;width:26px;height:26px;border-radius:7px;background:var(--soft);font-size:12px;font-weight:600;color:var(--muted);transition:all .18s var(--ease)}
+.choice:hover .tag{background:var(--accent);color:#fff}
+.choice.selected{border-color:var(--accent);background:rgba(31,111,92,.05)}
+.choice.selected .tag{background:var(--accent);color:#fff}
+.choice.correct{border-color:var(--accent);background:rgba(31,111,92,.08);color:#174f42}
+.choice.correct .tag{background:var(--accent);color:#fff}
+.choice.wrong{border-color:var(--bad);background:rgba(198,61,47,.07);color:#8f2c23}
+.choice.wrong .tag{background:var(--bad);color:#fff}
+.choice:disabled{cursor:default}
+.choice:disabled:hover{border-color:var(--line);background:transparent}
+.choice.correct:disabled:hover{border-color:var(--accent);background:rgba(31,111,92,.08)}
+.choice.wrong:disabled:hover{border-color:var(--bad);background:rgba(198,61,47,.07)}
+.review-note{font-size:12px;color:var(--muted);margin-top:12px}
+.quiz-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.quiz-actions .cta{margin-top:0}
+.result{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:22px;margin:0 0 14px;box-shadow:var(--shadow)}
+.result-kicker{font-size:12px;font-weight:600;color:var(--muted)}
+.result-score{font-size:42px;font-weight:700;line-height:1.15;margin-top:4px;color:var(--accent)}
+.result-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
+.result-box{background:var(--soft);border-radius:var(--r-md);padding:12px;text-align:center;font-size:12px;color:var(--muted)}
+.result-box b{display:block;color:var(--ink);font-size:20px;margin-bottom:1px}
+.section-title{font-size:12px;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:14px;margin:50px 0 14px}
+.section-title::after{content:"";flex:1;height:1px;background:var(--line)}
+@media(max-width:520px){.wrap{padding-inline:16px}.exam{padding:18px}.qcard{padding:20px}.result-grid{grid-template-columns:repeat(3,1fr)}.quiz-actions{grid-template-columns:1fr}.qtext{font-size:17px}}
 </style>
 </head>
 <body>
 <div class="wrap">
-<section id="home"><header class="hero"><p class="eyebrow">بنك أسئلة الرخصة المهنية</p><h1>اختبارات الرخصة المهنية</h1><p class="sub">تجميعات الأعوام السابقة، مرتّبة ومصحّحة. اختر تجميعة وتابع تقدّمك سؤالاً بسؤال.</p></header><section id="cards" class="index"><div class="loading">جاري تحميل الاختبارات…</div></section></section>
-<section id="quiz" class="hidden"><header class="quiz-head"><button class="back" onclick="goHome()">← العودة إلى الاختبارات</button><h2 class="quiz-title" id="quizTitle"></h2><p class="quiz-stat" id="quizStats"></p></header><section id="result" class="result hidden"></section><section id="questions" class="quiz-list"></section><div class="quiz-actions"><button class="cta" onclick="submitQuiz()">إنهاء وتصحيح الاختبار</button><button class="cta danger" onclick="resetQuiz()">مسح الإجابات</button></div></section>
+  <section id="home">
+    <header class="hero">
+      <p class="eyebrow">بنك أسئلة الرخصة المهنية</p>
+      <h1>اختبارات الرخصة المهنية</h1>
+      <p class="sub">تجميعات الأعوام السابقة، مرتّبة ومصحّحة. اختر تجميعة وتابع تقدّمك سؤالاً بسؤال.</p>
+    </header>
+    <section id="cards" class="index"><div class="loading">جاري تحميل الاختبارات…</div></section>
+  </section>
+  <section id="quiz" class="hidden">
+    <header class="quiz-head">
+      <button class="back" onclick="goHome()">← العودة إلى الاختبارات</button>
+      <h2 class="quiz-title" id="quizTitle"></h2>
+      <p class="quiz-stat" id="quizStats"></p>
+    </header>
+    <section id="result" class="result hidden"></section>
+    <section id="questions" class="quiz-list"></section>
+    <div class="quiz-actions">
+      <button class="cta" onclick="submitQuiz()">إنهاء وتصحيح الاختبار</button>
+      <button class="cta danger" onclick="resetQuiz()">مسح الإجابات</button>
+    </div>
+  </section>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/pako@2.1.0/dist/pako.min.js"></script><script src="data/c1.js"></script><script src="data/c2.js"></script><script src="data/c3.js"></script><script src="data/c4.js"></script><script src="data/c5.js"></script><script src="data/specialty-clean.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pako@2.1.0/dist/pako.min.js"></script>
+<script src="data/c1.js"></script><script src="data/c2.js"></script><script src="data/c3.js"></script><script src="data/c4.js"></script><script src="data/c5.js"></script><script src="data/specialty-clean.js"></script>
 <script>
-let DATA={groups:[],total:0},current=null,submitted=false;const answersKey=id=>'muhannad_quiz_'+id,doneKey=id=>'muhannad_quiz_done_'+id;
-function load(id){try{return JSON.parse(localStorage.getItem(answersKey(id))||'{}')}catch(e){return {}}}function save(id,a){localStorage.setItem(answersKey(id),JSON.stringify(a))}function isDone(id){return localStorage.getItem(doneKey(id))==='1'}function setDone(id,v){v?localStorage.setItem(doneKey(id),'1'):localStorage.removeItem(doneKey(id))}function escapeHtml(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
-function statsFor(g){const a=load(g.id);let answered=0,correct=0;for(const q of g.questions){if(a[q.n]){answered++;if(a[q.n]===q.answer)correct++}}const wrong=answered-correct,pct=g.count?Math.round(correct/g.count*100):0;return{answered,correct,wrong,pct,done:isDone(g.id)}}
-function examCard(g){const s=statsFor(g),progress=g.count?Math.round(s.answered/g.count*100):0,showScore=s.done,dialClass=!showScore?'empty':(s.pct===50?'even':(s.pct<50?'low':'')),pctHtml=showScore?`${s.pct}<i>٪</i>`:'—',meta=s.answered?`<span>أجبت <b>${s.answered}</b></span>${showScore?`<span>صحيح <b>${s.correct}</b></span>`:''}`:'<span>لم تبدأ بعد</span>';let label='بدء الاختبار',ghost='';if(s.done){label='مراجعة الإجابات';ghost=' ghost'}else if(s.answered)label='متابعة الاختبار';return `<article class="exam"><div class="exam-top"><div class="exam-text"><h2>${escapeHtml(g.title)}</h2><p class="desc">${escapeHtml(g.subtitle||'')}</p></div><div class="score"><div class="dial ${dialClass}" style="--p:${showScore?s.pct:0}"><span class="arc"></span><span class="pct">${pctHtml}</span></div><span class="score-label">صح</span></div></div><div class="track"><span class="bar" style="width:${progress}%"></span></div><div class="meta"><span><b>${g.count}</b> سؤالاً</span>${meta}</div><button class="cta${ghost}" onclick="openQuiz('${g.id}')">${label}</button></article>`}
+let DATA={groups:[],total:0};let current=null;let submitted=false;
+const answersKey=id=>'muhannad_quiz_'+id;const doneKey=id=>'muhannad_quiz_done_'+id;
+function load(id){try{return JSON.parse(localStorage.getItem(answersKey(id))||'{}')}catch(e){return {}}}
+function save(id,a){localStorage.setItem(answersKey(id),JSON.stringify(a))}
+function isDone(id){return localStorage.getItem(doneKey(id))==='1'}
+function setDone(id,v){v?localStorage.setItem(doneKey(id),'1'):localStorage.removeItem(doneKey(id))}
+function escapeHtml(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function statsFor(g){const a=load(g.id);let answered=0,correct=0;for(const q of g.questions){if(a[q.n]){answered++;if(a[q.n]===q.answer)correct++}}const wrong=answered-correct;const pct=g.count?Math.round(correct/g.count*100):0;return{answered,correct,wrong,pct,done:isDone(g.id)}}
+function firstUnansweredIndex(g){const a=load(g.id);const i=g.questions.findIndex(q=>!a[q.n]);return i<0?0:i}
+function examCard(g){const s=statsFor(g);const progress=g.count?Math.round((s.answered/g.count)*100):0;const showScore=s.done;const dialClass=!showScore?'empty':(s.pct===50?'even':(s.pct<50?'low':''));const pctHtml=showScore?`${s.pct}<i>٪</i>`:'—';const meta=s.answered?`<span>أجبت <b>${s.answered}</b></span>${showScore?`<span>صحيح <b>${s.correct}</b></span>`:''}`:'<span>لم تبدأ بعد</span>';let buttons='';if(!s.answered){buttons=`<button class="cta" onclick="openQuiz('${g.id}','start')">بدء الاختبار</button>`}else if(s.done){const cont=s.answered<g.count?`<button class="cta" onclick="openQuiz('${g.id}','resume')">إكمال الاختبار</button>`:'';buttons=`${cont}<button class="cta ghost" onclick="openQuiz('${g.id}','review')">مراجعة الإجابات</button>`}else{buttons=`<button class="cta" onclick="openQuiz('${g.id}','resume')">إكمال الاختبار</button>`}return `<article class="exam"><div class="exam-top"><div class="exam-text"><h2>${escapeHtml(g.title)}</h2><p class="desc">${escapeHtml(g.subtitle||'')}</p></div><div class="score"><div class="dial ${dialClass}" style="--p:${showScore?s.pct:0}"><span class="arc"></span><span class="pct">${pctHtml}</span></div><span class="score-label">صح</span></div></div><div class="track"><span class="bar" style="width:${progress}%"></span></div><div class="meta"><span><b>${g.count}</b> سؤالاً</span>${meta}</div><div class="card-actions">${buttons}</div></article>`}
 function renderHome(){const cards=document.getElementById('cards');cards.innerHTML='';const general=DATA.groups.filter(g=>!String(g.id).startsWith('specialty')),spec=DATA.groups.filter(g=>String(g.id).startsWith('specialty'));for(const g of general)cards.insertAdjacentHTML('beforeend',examCard(g));if(spec.length){cards.insertAdjacentHTML('beforeend','<p class="section-title">اختبارات التخصص - كيمياء</p>');for(const g of spec)cards.insertAdjacentHTML('beforeend',examCard(g))}}
-function openQuiz(id){current=DATA.groups.find(g=>g.id===id);if(!current)return;submitted=isDone(id);document.getElementById('home').classList.add('hidden');document.getElementById('quiz').classList.remove('hidden');document.getElementById('quizTitle').textContent=current.title;renderAllQuestions();renderResult();window.scrollTo({top:0,behavior:'smooth'})}
+function openQuiz(id,mode='review'){current=DATA.groups.find(g=>g.id===id);if(!current)return;if(mode==='resume'){submitted=false;setDone(id,false)}else if(mode==='start'){submitted=false}else{submitted=isDone(id)}document.getElementById('home').classList.add('hidden');document.getElementById('quiz').classList.remove('hidden');document.getElementById('quizTitle').textContent=current.title;renderAllQuestions();renderResult();if(mode==='resume'){const q=current.questions[firstUnansweredIndex(current)];setTimeout(()=>{const el=q&&document.getElementById('q'+q.n);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});else window.scrollTo({top:0,behavior:'smooth'})},80)}else{window.scrollTo({top:0,behavior:'smooth'})}}
 function questionCard(q,a){const answered=a[q.n],image=q.image?`<img class="qimg" src="${escapeHtml(q.image)}" alt="السؤال ${q.n}">`:'';const opts=(q.options||[]).map(o=>{let cls='choice';if(submitted){if(o.key===q.answer)cls+=' correct';else if(answered===o.key&&answered!==q.answer)cls+=' wrong'}else if(answered===o.key)cls+=' selected';return `<button class="${cls}" ${submitted?'disabled':''} onclick="choose(${q.n},'${o.key}',this)"><span class="tag">${escapeHtml(o.key)}</span><span>${escapeHtml(o.text||('اختيار '+o.key))}</span></button>`}).join('');let note='';if(submitted){if(!answered)note='<p class="review-note">لم تتم الإجابة عن هذا السؤال.</p>';else if(answered===q.answer)note='<p class="review-note">إجابتك صحيحة.</p>';else note='<p class="review-note">إجابتك باللون الأحمر، والإجابة الصحيحة باللون الأخضر.</p>'}return `<article class="qcard" id="q${q.n}"><p class="qnum">السؤال ${q.n} من ${current.count}</p><p class="qtext">${escapeHtml(q.text)}</p>${image}<div class="choices">${opts}</div>${note}</article>`}
 function renderAllQuestions(){const a=load(current.id);document.getElementById('questions').innerHTML=current.questions.map(q=>questionCard(q,a)).join('');updateStats()}
 function choose(n,k,btn){if(submitted)return;const a=load(current.id);a[n]=k;save(current.id,a);const box=btn.closest('.choices');box.querySelectorAll('.choice').forEach(x=>x.classList.remove('selected'));btn.classList.add('selected');updateStats()}
-function updateStats(){const a=load(current.id),n=current.questions.filter(q=>a[q.n]).length;document.getElementById('quizStats').textContent=`تمت الإجابة عن ${n} من ${current.count}`}
+function updateStats(){const a=load(current.id);const n=current.questions.filter(q=>a[q.n]).length;document.getElementById('quizStats').textContent=`تمت الإجابة عن ${n} من ${current.count}`}
 function renderResult(){const r=document.getElementById('result');if(!submitted){r.classList.add('hidden');r.innerHTML='';return}const s=statsFor(current),blank=current.count-s.answered;r.classList.remove('hidden');r.innerHTML=`<p class="result-kicker">النتيجة</p><div class="result-score">${s.pct}%</div><div class="result-grid"><div class="result-box"><b>${s.correct}</b>صحيح</div><div class="result-box"><b>${s.wrong}</b>خطأ</div><div class="result-box"><b>${blank}</b>بدون إجابة</div></div>`}
 function submitQuiz(){if(!current)return;submitted=true;setDone(current.id,true);renderAllQuestions();renderResult();window.scrollTo({top:0,behavior:'smooth'})}
 function resetQuiz(){if(!current)return;if(confirm('هل تريد مسح جميع إجابات هذا الاختبار والبدء من جديد؟')){localStorage.removeItem(answersKey(current.id));setDone(current.id,false);submitted=false;renderAllQuestions();renderResult();window.scrollTo({top:0,behavior:'smooth'})}}
 function goHome(){current=null;submitted=false;document.getElementById('quiz').classList.add('hidden');document.getElementById('home').classList.remove('hidden');renderHome();window.scrollTo({top:0,behavior:'smooth'})}
 async function decodeBase(){const bin=atob(window.QZ_B64||''),bytes=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);try{if(typeof DecompressionStream==='undefined')throw new Error('no native gzip');const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));return await new Response(stream).text()}catch(e){if(!window.pako)throw e;return new TextDecoder('utf-8').decode(window.pako.ungzip(bytes))}}
-async function boot(){try{DATA=JSON.parse(await decodeBase());try{const r=await fetch('data/clean-1444.json',{cache:'no-store'});if(r.ok){const j=await r.json(),clean={id:'edu1444',title:'التربوي العام 1444هـ',subtitle:'تجميعات التربوي العام',count:j.count,questions:j.questions.map(q=>({n:q.id,text:q.question,options:Object.entries(q.options).map(([key,text])=>({key,text})),answer:q.answer}))},i=DATA.groups.findIndex(g=>g.id==='edu1444');if(i>=0)DATA.groups[i]=clean}}catch(e){}const seen=new Set(DATA.groups.map(g=>g.id));for(const g of(window.SPEC_GROUPS||[])){if(!seen.has(g.id)){DATA.groups.push(g);seen.add(g.id)}}DATA.total=DATA.groups.reduce((s,g)=>s+(g.count||g.questions.length),0);renderHome()}catch(e){document.getElementById('cards').innerHTML='<div class="loading">تعذر تحميل الأسئلة. حدّث الصفحة مرة أخرى.</div>';console.error(e)}}boot();
+async function boot(){try{DATA=JSON.parse(await decodeBase());try{const r=await fetch('data/clean-1444.json',{cache:'no-store'});if(r.ok){const j=await r.json();const clean={id:'edu1444',title:'التربوي العام 1444هـ',subtitle:'تجميعات التربوي العام',count:j.count,questions:j.questions.map(q=>({n:q.id,text:q.question,options:Object.entries(q.options).map(([key,text])=>({key,text})),answer:q.answer}))};const i=DATA.groups.findIndex(g=>g.id==='edu1444');if(i>=0)DATA.groups[i]=clean}}catch(e){}const seen=new Set(DATA.groups.map(g=>g.id));for(const g of(window.SPEC_GROUPS||[])){if(!seen.has(g.id)){DATA.groups.push(g);seen.add(g.id)}}DATA.total=DATA.groups.reduce((s,g)=>s+(g.count||g.questions.length),0);renderHome()}catch(e){document.getElementById('cards').innerHTML='<div class="loading">تعذر تحميل الأسئلة. حدّث الصفحة مرة أخرى.</div>';console.error(e)}}
+boot();
 </script>
 </body>
 </html>
