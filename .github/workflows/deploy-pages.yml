@@ -94,6 +94,7 @@ jobs:
 
           fs.mkdirSync('_site', { recursive: true });
           fs.writeFileSync('_site/index.html', html, 'utf8');
+          fs.writeFileSync('_site/preview-1444.html', html, 'utf8');
           console.log('Built quiz with', parsed.total, 'questions; cleaned 1444 section:', clean1444.count);
           NODE
 
