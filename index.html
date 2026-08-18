@@ -88,6 +88,7 @@ button{font:inherit}
   </section>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/pako@2.1.0/dist/pako.min.js"></script>
 <script src="data/c1.js"></script>
 <script src="data/c2.js"></script>
 <script src="data/c3.js"></script>
@@ -186,12 +187,19 @@ async function boot(){
     const bin=atob(window.QZ_B64||'');
     const bytes=new Uint8Array(bin.length);
     for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);
-    const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
-    const text=await new Response(stream).text();
+    let text='';
+    try{
+      if(typeof DecompressionStream==='undefined') throw new Error('DecompressionStream unavailable');
+      const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
+      text=await new Response(stream).text();
+    }catch(nativeErr){
+      if(!window.pako) throw nativeErr;
+      text=new TextDecoder('utf-8').decode(window.pako.ungzip(bytes));
+    }
     DATA=JSON.parse(text);
     renderHome();
   }catch(e){
-    document.getElementById('cards').innerHTML='<div class="card"><h2>تعذر تحميل الأسئلة</h2><p>أعد تحميل الصفحة أو افتحها في Safari.</p></div>';
+    document.getElementById('cards').innerHTML='<div class="card"><h2>تعذر تحميل الأسئلة</h2><p>حدث الصفحة مرة أخرى. إذا استمرت المشكلة افتح الرابط مباشرة في Safari.</p></div>';
     console.error(e);
   }
 }
