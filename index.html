@@ -88,15 +88,13 @@ button{font:inherit}
   </section>
 </div>
 
-<script src="data/g1.js"></script>
-<script src="data/g2.js"></script>
-<script src="data/g3.js"></script>
-<script src="data/g4.js"></script>
-<script src="data/g5.js"></script>
-<script src="data/g6.js"></script>
-<script src="data/g7.js"></script>
+<script src="data/c1.js"></script>
+<script src="data/c2.js"></script>
+<script src="data/c3.js"></script>
+<script src="data/c4.js"></script>
+<script src="data/c5.js"></script>
 <script>
-const DATA={groups:window.QUIZ_GROUPS||[],total:(window.QUIZ_GROUPS||[]).reduce((a,g)=>a+g.count,0)};
+let DATA={groups:[],total:0};
 const LETTERS=['أ','ب','ج','د'];
 let current=null, submitted=false;
 const key=id=>'muhannad_quiz_'+id;
@@ -183,7 +181,21 @@ function goHome(){
   document.getElementById('home').classList.remove('hidden');
   renderHome();window.scrollTo({top:0,behavior:'smooth'});
 }
-renderHome();
+async function boot(){
+  try{
+    const bin=atob(window.QZ_B64||'');
+    const bytes=new Uint8Array(bin.length);
+    for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);
+    const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
+    const text=await new Response(stream).text();
+    DATA=JSON.parse(text);
+    renderHome();
+  }catch(e){
+    document.getElementById('cards').innerHTML='<div class="card"><h2>تعذر تحميل الأسئلة</h2><p>أعد تحميل الصفحة أو افتحها في Safari.</p></div>';
+    console.error(e);
+  }
+}
+boot();
 </script>
 </body>
 </html>
