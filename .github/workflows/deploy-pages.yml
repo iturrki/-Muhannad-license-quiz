@@ -25,89 +25,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Build site
+      - name: Prepare static site
         shell: bash
         run: |
-          node <<'NODE'
-          const fs = require('fs');
-          const zlib = require('zlib');
-          const vm = require('vm');
-
-          const context = { window: {} };
-          vm.createContext(context);
-          for (let i = 1; i <= 5; i++) {
-            vm.runInContext(fs.readFileSync(`data/c${i}.js`, 'utf8'), context, {filename:`data/c${i}.js`});
-          }
-
-          const b64 = context.window.QZ_B64 || '';
-          if (!b64) throw new Error('Quiz data is empty');
-          const gz = Buffer.from(b64, 'base64');
-          let data;
-          try {
-            data = zlib.gunzipSync(gz).toString('utf8');
-          } catch (err) {
-            console.warn('gzip checksum failed; retrying raw DEFLATE payload');
-            if (gz.length < 18 || gz[0] !== 0x1f || gz[1] !== 0x8b) throw err;
-            const flg = gz[3];
-            let p = 10;
-            if (flg & 4) { const xlen = gz[p] | (gz[p+1] << 8); p += 2 + xlen; }
-            if (flg & 8) { while (p < gz.length && gz[p++] !== 0); }
-            if (flg & 16) { while (p < gz.length && gz[p++] !== 0); }
-            if (flg & 2) p += 2;
-            data = zlib.inflateRawSync(gz.subarray(p, gz.length - 8)).toString('utf8');
-          }
-
-          const parsed = JSON.parse(data);
-          if (!Array.isArray(parsed.groups)) throw new Error('Quiz JSON structure invalid');
-
-          const clean1444 = JSON.parse(fs.readFileSync('data/clean-1444.json', 'utf8'));
-          const cleanGroup = {
-            id:'edu1444',
-            title:'التربوي العام 1444هـ',
-            subtitle:'تجميعات التربوي العام',
-            count:clean1444.count,
-            questions:clean1444.questions.map(q=>({
-              n:q.id,
-              text:q.question,
-              options:Object.entries(q.options).map(([key,text])=>({key,text})),
-              answer:q.answer
-            }))
-          };
-          const gi = parsed.groups.findIndex(g=>g.id==='edu1444');
-          if (gi >= 0) parsed.groups[gi] = cleanGroup;
-          parsed.total = parsed.groups.reduce((sum,g)=>sum+(g.count || g.questions?.length || 0),0);
-
-          function makePage(pageData, autoOpen1444=false) {
-            let out = fs.readFileSync('index.html','utf8');
-            out = out.replace(/<script src="https:\/\/cdn\.jsdelivr\.net[^>]*><\/script>\s*/g,'');
-            out = out.replace(/<script src="data\/c\d+\.js"><\/script>\s*/g,'');
-            out = out.replace(/<script src="data\/specialty[^\"]+\.js"><\/script>\s*/g,'');
-            out = out.replace(/let DATA=\{groups:\[\],total:0\};/, `const DATA=${JSON.stringify(pageData)};`);
-            out = out.replace('<script>\nlet DATA=', '<script src="data/specialty-clean.js"></script>\n<script>\nlet DATA=');
-            out = out.replace('<script>\nconst DATA=', '<script src="data/specialty-clean.js"></script>\n<script>\nconst DATA=');
-
-            const startup = `
-(function(){
-  const specialty=window.SPEC_GROUPS||[];
-  const seen=new Set(DATA.groups.map(g=>g.id));
-  for(const g of specialty){ if(!seen.has(g.id)){ DATA.groups.push(g); seen.add(g.id); } }
-  DATA.total=DATA.groups.reduce((s,g)=>s+(g.count||g.questions.length),0);
-  renderHome();
-  ${autoOpen1444 ? "openQuiz('edu1444');" : ''}
-})();`;
-
-            out = out.replace(/async function boot\(\)\{[\s\S]*?\}boot\(\);/, startup);
-            return out;
-          }
-
-          fs.rmSync('_site',{recursive:true,force:true});
-          fs.mkdirSync('_site/data',{recursive:true});
-          fs.writeFileSync('_site/index.html',makePage(parsed),'utf8');
-          fs.writeFileSync('_site/preview-1444.html',makePage({groups:[cleanGroup],total:cleanGroup.count},true),'utf8');
-          fs.copyFileSync('data/specialty-clean.js','_site/data/specialty-clean.js');
-          fs.writeFileSync('_site/.nojekyll','');
-          console.log(`Built general site with ${parsed.total} base questions plus 278 cleaned specialty questions.`);
-          NODE
+          rm -rf _site
+          mkdir -p _site
+          cp index.html _site/index.html
+          cp -R data _site/data
+          touch _site/.nojekyll
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
