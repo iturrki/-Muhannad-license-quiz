@@ -1,0 +1,47 @@
+name: Update attempt buttons
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'attempt-buttons-trigger.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update quiz card button logic
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+
+          new_exam = r'''function examCard(g){const s=statsFor(g);const progress=g.count?Math.round((s.answered/g.count)*100):0;const showScore=s.done;const dialClass=!showScore?'empty':(s.pct===50?'even':(s.pct<50?'low':''));const pctHtml=showScore?`${s.pct}<i>٪</i>`:'—';const meta=s.answered?`<span>أجبت <b>${s.answered}</b></span>${showScore?`<span>صحيح <b>${s.correct}</b></span>`:''}`:'<span>لم تبدأ بعد</span>';let buttons='';if(!s.answered){buttons=`<button class="cta" onclick="openQuiz('${g.id}','start')">بدء الاختبار</button>`}else if(s.done){if(s.answered<g.count){buttons=`<button class="cta" onclick="openQuiz('${g.id}','resume')">إكمال الاختبار</button><button class="cta ghost" onclick="openQuiz('${g.id}','review')">مراجعة الإجابات</button>`}else if(s.pct<100){buttons=`<button class="cta" onclick="restartQuiz('${g.id}')">إعادة الاختبار</button><button class="cta ghost" onclick="openQuiz('${g.id}','review')">مراجعة الإجابات</button>`}else{buttons=`<button class="cta ghost" onclick="openQuiz('${g.id}','review')">مراجعة الإجابات</button>`}}else{buttons=`<button class="cta" onclick="openQuiz('${g.id}','resume')">إكمال الاختبار</button>`}return `<article class="exam"><div class="exam-top"><div class="exam-text"><h2>${escapeHtml(g.title)}</h2><p class="desc">${escapeHtml(g.subtitle||'')}</p></div><div class="score"><div class="dial ${dialClass}" style="--p:${showScore?s.pct:0}"><span class="arc"></span><span class="pct">${pctHtml}</span></div><span class="score-label">صح</span></div></div><div class="track"><span class="bar" style="width:${progress}%"></span></div><div class="meta"><span><b>${g.count}</b> سؤالاً</span>${meta}</div><div class="card-actions">${buttons}</div></article>`}'''
+
+          s, n = re.subn(r'function examCard\(g\)\{.*?\}\nfunction renderHome', new_exam + '\nfunction renderHome', s, count=1, flags=re.S)
+          if n != 1:
+              raise SystemExit('examCard patch failed')
+
+          if 'function restartQuiz(id)' not in s:
+              marker = 'function openQuiz(id,mode=\'review\')'
+              restart = "function restartQuiz(id){if(!confirm('هل تريد إعادة الاختبار؟ سيتم مسح إجابات المحاولة السابقة.'))return;localStorage.removeItem(answersKey(id));setDone(id,false);openQuiz(id,'start')}\n"
+              s = s.replace(marker, restart + marker, 1)
+
+          p.write_text(s, encoding='utf-8')
+          PY
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Use resume or retry buttons based on quiz state"
+          git push
