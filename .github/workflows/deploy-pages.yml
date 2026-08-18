@@ -62,7 +62,6 @@ jobs:
           const parsed = JSON.parse(data);
           if (!parsed.groups || !parsed.total) throw new Error('Quiz JSON structure invalid');
 
-          // Replace only the 1444 section with the cleaned JSON supplied by the user.
           const clean1444 = JSON.parse(fs.readFileSync('data/clean-1444.json', 'utf8'));
           const cleanGroup = {
             id: 'edu1444',
@@ -76,26 +75,30 @@ jobs:
               answer: q.answer
             }))
           };
+
           const groupIndex = parsed.groups.findIndex(g => g.id === 'edu1444');
           if (groupIndex === -1) throw new Error('1444 quiz group not found');
           parsed.groups[groupIndex] = cleanGroup;
           parsed.total = parsed.groups.reduce((sum, g) => sum + g.count, 0);
           data = JSON.stringify(parsed);
 
-          let html = fs.readFileSync('index.html', 'utf8');
-          html = html.replace(/<script src="https:\/\/cdn\.jsdelivr\.net[^>]*><\/script>\s*/g, '');
-          html = html.replace(/<script src="data\/c\d+\.js"><\/script>\s*/g, '');
-          html = html.replace(/let DATA=\{groups:\[\],total:0\};/, `const DATA=${data};`);
-          html = html.replace(/async function boot\(\)\{[\s\S]*?\n\}\nboot\(\);/, 'renderHome();');
-          html = html.replace('      <p>حل الأسئلة نصيًا، واحصل على النتيجة بعد إنهاء الاختبار.</p>\n', '');
-          html = html.replace('      <span class="pill" id="totalPill"></span>\n', '');
-          html = html.replace("  document.getElementById('totalPill').textContent=DATA.total+' سؤال';\n", '');
-          html = html.replace('    <p class="note">الأسئلة ومفاتيح الإجابة مستخرجة من ملف التجميعات المرفق. قد تظهر بعض الكلمات كما وردت في استخراج النص من ملف PDF.</p>\n', '');
+          function makePage(pageData, autoOpen1444 = false) {
+            let out = fs.readFileSync('index.html', 'utf8');
+            out = out.replace(/<script src="https:\/\/cdn\.jsdelivr\.net[^>]*><\/script>\s*/g, '');
+            out = out.replace(/<script src="data\/c\d+\.js"><\/script>\s*/g, '');
+            out = out.replace(/let DATA=\{groups:\[\],total:0\};/, `const DATA=${JSON.stringify(pageData)};`);
+            out = out.replace(/async function boot\(\)\{[\s\S]*?\n\}\nboot\(\);/, autoOpen1444 ? "renderHome();openQuiz('edu1444');" : 'renderHome();');
+            out = out.replace('      <p>حل الأسئلة نصيًا، واحصل على النتيجة بعد إنهاء الاختبار.</p>\n', '');
+            out = out.replace('      <span class="pill" id="totalPill"></span>\n', '');
+            out = out.replace("  document.getElementById('totalPill').textContent=DATA.total+' سؤال';\n", '');
+            out = out.replace('    <p class="note">الأسئلة ومفاتيح الإجابة مستخرجة من ملف التجميعات المرفق. قد تظهر بعض الكلمات كما وردت في استخراج النص من ملف PDF.</p>\n', '');
+            return out;
+          }
 
           fs.mkdirSync('_site', { recursive: true });
-          fs.writeFileSync('_site/index.html', html, 'utf8');
-          fs.writeFileSync('_site/preview-1444.html', html, 'utf8');
-          console.log('Built quiz with', parsed.total, 'questions; cleaned 1444 section:', clean1444.count);
+          fs.writeFileSync('_site/index.html', makePage(parsed), 'utf8');
+          fs.writeFileSync('_site/preview-1444.html', makePage({ groups: [cleanGroup], total: cleanGroup.count }, true), 'utf8');
+          console.log('Built main site and direct 1444 preview with', clean1444.count, 'cleaned questions');
           NODE
 
       - name: Setup Pages
