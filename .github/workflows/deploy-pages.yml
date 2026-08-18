@@ -62,6 +62,7 @@ jobs:
           const parsed = JSON.parse(data);
           if (!parsed.groups || !parsed.total) throw new Error('Quiz JSON structure invalid');
 
+          // The full 1444 section is sourced from the cleaned 83-question JSON.
           const clean1444 = JSON.parse(fs.readFileSync('data/clean-1444.json', 'utf8'));
           const cleanGroup = {
             id: 'edu1444',
