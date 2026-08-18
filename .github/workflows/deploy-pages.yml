@@ -70,6 +70,7 @@ jobs:
           html = html.replace('      <p>حل الأسئلة نصيًا، واحصل على النتيجة بعد إنهاء الاختبار.</p>\n', '');
           html = html.replace('      <span class="pill" id="totalPill"></span>\n', '');
           html = html.replace("  document.getElementById('totalPill').textContent=DATA.total+' سؤال';\n", '');
+          html = html.replace('    <p class="note">الأسئلة ومفاتيح الإجابة مستخرجة من ملف التجميعات المرفق. قد تظهر بعض الكلمات كما وردت في استخراج النص من ملف PDF.</p>\n', '');
 
           fs.mkdirSync('_site', { recursive: true });
           fs.writeFileSync('_site/index.html', html, 'utf8');
