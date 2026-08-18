@@ -31,14 +31,17 @@ jobs:
           node <<'NODE'
           const fs = require('fs');
           const zlib = require('zlib');
+          const vm = require('vm');
 
-          let b64 = '';
+          const context = { window: {} };
+          vm.createContext(context);
           for (let i = 1; i <= 5; i++) {
-            const s = fs.readFileSync(`data/c${i}.js`, 'utf8');
-            const m = s.match(/\+'([^']*)';?\s*$/);
-            if (!m) throw new Error(`Could not read data chunk c${i}.js`);
-            b64 += m[1];
+            const code = fs.readFileSync(`data/c${i}.js`, 'utf8');
+            vm.runInContext(code, context, { filename: `data/c${i}.js` });
           }
+
+          const b64 = context.window.QZ_B64 || '';
+          if (!b64) throw new Error('Quiz data is empty');
 
           const data = zlib.gunzipSync(Buffer.from(b64, 'base64')).toString('utf8');
           JSON.parse(data);
@@ -50,7 +53,8 @@ jobs:
           html = html.replace(/async function boot\(\)\{[\s\S]*?\n\}\nboot\(\);/, 'renderHome();');
 
           fs.mkdirSync('_site', { recursive: true });
-          fs.writeFileSync('_site/index.html', html);
+          fs.writeFileSync('_site/index.html', html, 'utf8');
+          console.log('Built quiz with', JSON.parse(data).total, 'questions');
           NODE
 
       - name: Setup Pages
