@@ -62,6 +62,26 @@ jobs:
           const parsed = JSON.parse(data);
           if (!parsed.groups || !parsed.total) throw new Error('Quiz JSON structure invalid');
 
+          // Replace only the 1444 section with the cleaned JSON supplied by the user.
+          const clean1444 = JSON.parse(fs.readFileSync('data/clean-1444.json', 'utf8'));
+          const cleanGroup = {
+            id: 'edu1444',
+            title: 'التربوي العام 1444هـ',
+            subtitle: 'تجميعات التربوي العام',
+            count: clean1444.count,
+            questions: clean1444.questions.map(q => ({
+              n: q.id,
+              text: q.question,
+              options: Object.entries(q.options).map(([key, text]) => ({ key, text })),
+              answer: q.answer
+            }))
+          };
+          const groupIndex = parsed.groups.findIndex(g => g.id === 'edu1444');
+          if (groupIndex === -1) throw new Error('1444 quiz group not found');
+          parsed.groups[groupIndex] = cleanGroup;
+          parsed.total = parsed.groups.reduce((sum, g) => sum + g.count, 0);
+          data = JSON.stringify(parsed);
+
           let html = fs.readFileSync('index.html', 'utf8');
           html = html.replace(/<script src="https:\/\/cdn\.jsdelivr\.net[^>]*><\/script>\s*/g, '');
           html = html.replace(/<script src="data\/c\d+\.js"><\/script>\s*/g, '');
@@ -74,7 +94,7 @@ jobs:
 
           fs.mkdirSync('_site', { recursive: true });
           fs.writeFileSync('_site/index.html', html, 'utf8');
-          console.log('Built quiz with', parsed.total, 'questions');
+          console.log('Built quiz with', parsed.total, 'questions; cleaned 1444 section:', clean1444.count);
           NODE
 
       - name: Setup Pages
