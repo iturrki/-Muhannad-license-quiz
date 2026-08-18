@@ -1,0 +1,35 @@
+name: Add clear home back button
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'home-back-trigger.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Make home back button prominent
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          s = s.replace('.back{display:inline-flex;align-items:center;gap:7px;color:var(--accent);font-size:13px;font-weight:600;margin-bottom:12px}', '.back{display:inline-flex;align-items:center;gap:7px;color:var(--accent);font-size:13px;font-weight:600;margin-bottom:12px}.home-back{padding:9px 12px;background:var(--soft);border:1px solid var(--line);border-radius:var(--r-md)}')
+          s = s.replace('<button class="back" onclick="goLanding()">← الرئيسية</button>', '<button class="back home-back" onclick="goLanding()">← الرجوع للرئيسية</button>')
+          p.write_text(s, encoding='utf-8')
+          PY
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Add prominent back to home button in category pages"
+          git push
