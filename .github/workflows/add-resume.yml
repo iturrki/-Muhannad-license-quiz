@@ -1,0 +1,48 @@
+name: Add resume quiz button
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'resume-trigger.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch resume behavior
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+
+          if '.card-actions{' not in s:
+              s=s.replace('.cta.danger{background:transparent;color:var(--bad);border:1px solid var(--line);box-shadow:none}', '.cta.danger{background:transparent;color:var(--bad);border:1px solid var(--line);box-shadow:none}.card-actions{display:grid;grid-template-columns:1fr;gap:8px;margin-top:16px}.card-actions .cta{margin-top:0}')
+
+          new_exam = r'''function firstUnansweredIndex(g){const a=load(g.id),i=g.questions.findIndex(q=>!a[q.n]);return i<0?0:i}
+function examCard(g){const s=statsFor(g),progress=g.count?Math.round(s.answered/g.count*100):0,showScore=s.done,dialClass=!showScore?'empty':(s.pct===50?'even':(s.pct<50?'low':'')),pctHtml=showScore?`${s.pct}<i>٪</i>`:'—',meta=s.answered?`<span>أجبت <b>${s.answered}</b></span>${showScore?`<span>صحيح <b>${s.correct}</b></span>`:''}`:'<span>لم تبدأ بعد</span>';let buttons='';if(!s.answered){buttons=`<button class="cta" onclick="openQuiz('${g.id}','start')">بدء الاختبار</button>`}else if(s.done){const cont=s.answered<g.count?`<button class="cta" onclick="openQuiz('${g.id}','resume')">إكمال الاختبار</button>`:'';buttons=`${cont}<button class="cta ghost" onclick="openQuiz('${g.id}','review')">مراجعة الإجابات</button>`}else{buttons=`<button class="cta" onclick="openQuiz('${g.id}','resume')">إكمال الاختبار</button>`}return `<article class="exam"><div class="exam-top"><div class="exam-text"><h2>${escapeHtml(g.title)}</h2><p class="desc">${escapeHtml(g.subtitle||'')}</p></div><div class="score"><div class="dial ${dialClass}" style="--p:${showScore?s.pct:0}"><span class="arc"></span><span class="pct">${pctHtml}</span></div><span class="score-label">صح</span></div></div><div class="track"><span class="bar" style="width:${progress}%"></span></div><div class="meta"><span><b>${g.count}</b> سؤالاً</span>${meta}</div><div class="card-actions">${buttons}</div></article>`}'''
+          s,n=re.subn(r'function examCard\(g\)\{.*?\}\nfunction renderHome', new_exam+'\nfunction renderHome', s, count=1, flags=re.S)
+          if n!=1: raise SystemExit('examCard patch failed')
+
+          new_open = r'''function openQuiz(id,mode='review'){current=DATA.groups.find(g=>g.id===id);if(!current)return;if(mode==='resume'){submitted=false;setDone(id,false)}else if(mode==='start'){submitted=false}else{submitted=isDone(id)}document.getElementById('home').classList.add('hidden');document.getElementById('quiz').classList.remove('hidden');document.getElementById('quizTitle').textContent=current.title;renderAllQuestions();renderResult();if(mode==='resume'){const q=current.questions[firstUnansweredIndex(current)];setTimeout(()=>{const el=q&&document.getElementById('q'+q.n);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});else window.scrollTo({top:0,behavior:'smooth'})},80)}else{window.scrollTo({top:0,behavior:'smooth'})}}'''
+          s,n=re.subn(r'function openQuiz\(id\)\{.*?\}\nfunction questionCard', new_open+'\nfunction questionCard', s, count=1, flags=re.S)
+          if n!=1: raise SystemExit('openQuiz patch failed')
+
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Commit patch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Add resume quiz button and continue from first unanswered"
+          git push
