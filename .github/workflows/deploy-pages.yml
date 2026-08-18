@@ -33,7 +33,6 @@ jobs:
           const zlib = require('zlib');
           const vm = require('vm');
 
-          // Decode only the original general-question bundle during build.
           const context = { window: {} };
           vm.createContext(context);
           for (let i = 1; i <= 5; i++) {
@@ -61,7 +60,6 @@ jobs:
           const parsed = JSON.parse(data);
           if (!Array.isArray(parsed.groups)) throw new Error('Quiz JSON structure invalid');
 
-          // Keep the cleaned 1444 section.
           const clean1444 = JSON.parse(fs.readFileSync('data/clean-1444.json', 'utf8'));
           const cleanGroup = {
             id:'edu1444',
@@ -81,24 +79,16 @@ jobs:
 
           function makePage(pageData, autoOpen1444=false) {
             let out = fs.readFileSync('index.html','utf8');
-
-            // General data is embedded below, so these old compressed data files are not needed by the browser.
             out = out.replace(/<script src="https:\/\/cdn\.jsdelivr\.net[^>]*><\/script>\s*/g,'');
             out = out.replace(/<script src="data\/c\d+\.js"><\/script>\s*/g,'');
+            out = out.replace(/<script src="data\/specialty[^\"]+\.js"><\/script>\s*/g,'');
             out = out.replace(/let DATA=\{groups:\[\],total:0\};/, `const DATA=${JSON.stringify(pageData)};`);
+            out = out.replace('<script>\nlet DATA=', '<script src="data/specialty-clean.js"></script>\n<script>\nlet DATA=');
+            out = out.replace('<script>\nconst DATA=', '<script src="data/specialty-clean.js"></script>\n<script>\nconst DATA=');
 
             const startup = `
 (function(){
-  const compact=(window.SPEC_COMPACT||[]).map(g=>({
-    ...g,
-    questions:g.questions.map((r,i)=>({
-      n:i+1,
-      text:String(r[0]||'').replace(/\\s*\\|\\s*/g,'\\n'),
-      options:LETTERS.map(k=>({key:k,text:'اختيار '+k})),
-      answer:r[1], source:r[2], source_q:r[3], compact:true
-    }))
-  }));
-  const specialty=[...(window.SPEC_GROUPS||[]),...compact];
+  const specialty=window.SPEC_GROUPS||[];
   const seen=new Set(DATA.groups.map(g=>g.id));
   for(const g of specialty){ if(!seen.has(g.id)){ DATA.groups.push(g); seen.add(g.id); } }
   DATA.total=DATA.groups.reduce((s,g)=>s+(g.count||g.questions.length),0);
@@ -114,15 +104,9 @@ jobs:
           fs.mkdirSync('_site/data',{recursive:true});
           fs.writeFileSync('_site/index.html',makePage(parsed),'utf8');
           fs.writeFileSync('_site/preview-1444.html',makePage({groups:[cleanGroup],total:cleanGroup.count},true),'utf8');
-
-          // Specialty question files are loaded normally in the browser.
-          for (const name of fs.readdirSync('data')) {
-            if (name.startsWith('specialty') && name.endsWith('.js')) {
-              fs.copyFileSync(`data/${name}`, `_site/data/${name}`);
-            }
-          }
+          fs.copyFileSync('data/specialty-clean.js','_site/data/specialty-clean.js');
           fs.writeFileSync('_site/.nojekyll','');
-          console.log(`Built general site with ${parsed.total} base questions; specialty files copied for browser loading.`);
+          console.log(`Built general site with ${parsed.total} base questions plus 278 cleaned specialty questions.`);
           NODE
 
       - name: Setup Pages
