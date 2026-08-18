@@ -1,0 +1,1 @@
+Trigger specialty quiz integration for chemistry question sets 1-14.
