@@ -24,12 +24,43 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+
+      - name: Build self-contained site
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const zlib = require('zlib');
+
+          let b64 = '';
+          for (let i = 1; i <= 5; i++) {
+            const s = fs.readFileSync(`data/c${i}.js`, 'utf8');
+            const m = s.match(/\+'([^']*)';?\s*$/);
+            if (!m) throw new Error(`Could not read data chunk c${i}.js`);
+            b64 += m[1];
+          }
+
+          const data = zlib.gunzipSync(Buffer.from(b64, 'base64')).toString('utf8');
+          JSON.parse(data);
+
+          let html = fs.readFileSync('index.html', 'utf8');
+          html = html.replace(/<script src="https:\/\/cdn\.jsdelivr\.net[^>]*><\/script>\s*/g, '');
+          html = html.replace(/<script src="data\/c\d+\.js"><\/script>\s*/g, '');
+          html = html.replace(/let DATA=\{groups:\[\],total:0\};/, `const DATA=${data};`);
+          html = html.replace(/async function boot\(\)\{[\s\S]*?\n\}\nboot\(\);/, 'renderHome();');
+
+          fs.mkdirSync('_site', { recursive: true });
+          fs.writeFileSync('_site/index.html', html);
+          NODE
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
         with:
-          path: '.'
+          path: '_site'
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
