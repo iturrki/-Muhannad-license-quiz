@@ -42,9 +42,25 @@ jobs:
 
           const b64 = context.window.QZ_B64 || '';
           if (!b64) throw new Error('Quiz data is empty');
+          const gz = Buffer.from(b64, 'base64');
 
-          const data = zlib.gunzipSync(Buffer.from(b64, 'base64')).toString('utf8');
-          JSON.parse(data);
+          let data;
+          try {
+            data = zlib.gunzipSync(gz).toString('utf8');
+          } catch (err) {
+            console.warn('gzip wrapper checksum failed; retrying raw DEFLATE payload');
+            if (gz.length < 18 || gz[0] !== 0x1f || gz[1] !== 0x8b) throw err;
+            const flg = gz[3];
+            let p = 10;
+            if (flg & 4) { const xlen = gz[p] | (gz[p+1] << 8); p += 2 + xlen; }
+            if (flg & 8) { while (p < gz.length && gz[p++] !== 0); }
+            if (flg & 16) { while (p < gz.length && gz[p++] !== 0); }
+            if (flg & 2) p += 2;
+            data = zlib.inflateRawSync(gz.subarray(p, gz.length - 8)).toString('utf8');
+          }
+
+          const parsed = JSON.parse(data);
+          if (!parsed.groups || !parsed.total) throw new Error('Quiz JSON structure invalid');
 
           let html = fs.readFileSync('index.html', 'utf8');
           html = html.replace(/<script src="https:\/\/cdn\.jsdelivr\.net[^>]*><\/script>\s*/g, '');
@@ -54,7 +70,7 @@ jobs:
 
           fs.mkdirSync('_site', { recursive: true });
           fs.writeFileSync('_site/index.html', html, 'utf8');
-          console.log('Built quiz with', JSON.parse(data).total, 'questions');
+          console.log('Built quiz with', parsed.total, 'questions');
           NODE
 
       - name: Setup Pages
