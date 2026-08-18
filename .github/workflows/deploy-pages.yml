@@ -67,6 +67,9 @@ jobs:
           html = html.replace(/<script src="data\/c\d+\.js"><\/script>\s*/g, '');
           html = html.replace(/let DATA=\{groups:\[\],total:0\};/, `const DATA=${data};`);
           html = html.replace(/async function boot\(\)\{[\s\S]*?\n\}\nboot\(\);/, 'renderHome();');
+          html = html.replace('      <p>حل الأسئلة نصيًا، واحصل على النتيجة بعد إنهاء الاختبار.</p>\n', '');
+          html = html.replace('      <span class="pill" id="totalPill"></span>\n', '');
+          html = html.replace("  document.getElementById('totalPill').textContent=DATA.total+' سؤال';\n", '');
 
           fs.mkdirSync('_site', { recursive: true });
           fs.writeFileSync('_site/index.html', html, 'utf8');
