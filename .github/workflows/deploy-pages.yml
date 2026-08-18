@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
       - name: Build self-contained site
         shell: bash
@@ -36,70 +36,80 @@ jobs:
           const context = { window: {} };
           vm.createContext(context);
           for (let i = 1; i <= 5; i++) {
-            const code = fs.readFileSync(`data/c${i}.js`, 'utf8');
-            vm.runInContext(code, context, { filename: `data/c${i}.js` });
+            vm.runInContext(fs.readFileSync(`data/c${i}.js`, 'utf8'), context, {filename:`data/c${i}.js`});
           }
 
           const b64 = context.window.QZ_B64 || '';
           if (!b64) throw new Error('Quiz data is empty');
           const gz = Buffer.from(b64, 'base64');
-
           let data;
           try {
             data = zlib.gunzipSync(gz).toString('utf8');
           } catch (err) {
             console.warn('gzip wrapper checksum failed; retrying raw DEFLATE payload');
             if (gz.length < 18 || gz[0] !== 0x1f || gz[1] !== 0x8b) throw err;
-            const flg = gz[3];
-            let p = 10;
+            const flg = gz[3]; let p = 10;
             if (flg & 4) { const xlen = gz[p] | (gz[p+1] << 8); p += 2 + xlen; }
             if (flg & 8) { while (p < gz.length && gz[p++] !== 0); }
             if (flg & 16) { while (p < gz.length && gz[p++] !== 0); }
             if (flg & 2) p += 2;
             data = zlib.inflateRawSync(gz.subarray(p, gz.length - 8)).toString('utf8');
           }
-
           const parsed = JSON.parse(data);
-          if (!parsed.groups || !parsed.total) throw new Error('Quiz JSON structure invalid');
+          if (!parsed.groups) throw new Error('Quiz JSON structure invalid');
 
-          // The full 1444 section is sourced from the cleaned 83-question JSON.
+          // Keep the cleaned 1444 general section.
           const clean1444 = JSON.parse(fs.readFileSync('data/clean-1444.json', 'utf8'));
           const cleanGroup = {
-            id: 'edu1444',
-            title: 'التربوي العام 1444هـ',
-            subtitle: 'تجميعات التربوي العام',
-            count: clean1444.count,
-            questions: clean1444.questions.map(q => ({
-              n: q.id,
-              text: q.question,
-              options: Object.entries(q.options).map(([key, text]) => ({ key, text })),
-              answer: q.answer
+            id:'edu1444', title:'التربوي العام 1444هـ', subtitle:'تجميعات التربوي العام', count:clean1444.count,
+            questions:clean1444.questions.map(q=>({
+              n:q.id, text:q.question,
+              options:Object.entries(q.options).map(([key,text])=>({key,text})), answer:q.answer
             }))
           };
+          const gi = parsed.groups.findIndex(g=>g.id==='edu1444');
+          if (gi >= 0) parsed.groups[gi] = cleanGroup;
 
-          const groupIndex = parsed.groups.findIndex(g => g.id === 'edu1444');
-          if (groupIndex === -1) throw new Error('1444 quiz group not found');
-          parsed.groups[groupIndex] = cleanGroup;
-          parsed.total = parsed.groups.reduce((sum, g) => sum + g.count, 0);
-          data = JSON.stringify(parsed);
+          // Load all specialty chemistry sets. 1-4 are full objects; 5-14 are compact objects.
+          const specialtyFiles = [
+            'specialty1.js','specialty2.js','specialty3.js','specialty4a.js','specialty4b.js','specialty4c.js',
+            'specialty5.js','specialty6.js','specialty7.js','specialty8.js','specialty9.js','specialty10.js',
+            'specialty11.js','specialty12.js','specialty13.js','specialty14.js'
+          ];
+          for (const f of specialtyFiles) {
+            vm.runInContext(fs.readFileSync(`data/${f}`, 'utf8'), context, {filename:`data/${f}`});
+          }
+          const letters = ['أ','ب','ج','د'];
+          const full = context.window.SPEC_GROUPS || [];
+          const compact = (context.window.SPEC_COMPACT || []).map(g=>({
+            ...g,
+            questions:g.questions.map((r,i)=>({
+              n:i+1,
+              text:String(r[0]||'').replace(/\s*\|\s*/g,'\n'),
+              options:letters.map(k=>({key:k,text:'اختيار '+k})),
+              answer:r[1], source:r[2], source_q:r[3], compact:true
+            }))
+          }));
+          parsed.groups.push(...full, ...compact);
+          parsed.total = parsed.groups.reduce((sum,g)=>sum+(g.count || g.questions.length),0);
 
-          function makePage(pageData, autoOpen1444 = false) {
-            let out = fs.readFileSync('index.html', 'utf8');
-            out = out.replace(/<script src="https:\/\/cdn\.jsdelivr\.net[^>]*><\/script>\s*/g, '');
-            out = out.replace(/<script src="data\/c\d+\.js"><\/script>\s*/g, '');
+          if (full.length + compact.length !== 14) throw new Error(`Expected 14 specialty tests, got ${full.length + compact.length}`);
+          const specialtyTotal = [...full,...compact].reduce((s,g)=>s+g.count,0);
+          if (specialtyTotal !== 278) throw new Error(`Expected 278 specialty questions, got ${specialtyTotal}`);
+
+          function makePage(pageData, autoOpen1444=false) {
+            let out = fs.readFileSync('index.html','utf8');
+            out = out.replace(/<script src="https:\/\/cdn\.jsdelivr\.net[^>]*><\/script>\s*/g,'');
+            out = out.replace(/<script src="data\/[^\"]+\.js"><\/script>\s*/g,'');
             out = out.replace(/let DATA=\{groups:\[\],total:0\};/, `const DATA=${JSON.stringify(pageData)};`);
-            out = out.replace(/async function boot\(\)\{[\s\S]*?\n\}\nboot\(\);/, autoOpen1444 ? "renderHome();openQuiz('edu1444');" : 'renderHome();');
-            out = out.replace('      <p>حل الأسئلة نصيًا، واحصل على النتيجة بعد إنهاء الاختبار.</p>\n', '');
-            out = out.replace('      <span class="pill" id="totalPill"></span>\n', '');
-            out = out.replace("  document.getElementById('totalPill').textContent=DATA.total+' سؤال';\n", '');
-            out = out.replace('    <p class="note">الأسئلة ومفاتيح الإجابة مستخرجة من ملف التجميعات المرفق. قد تظهر بعض الكلمات كما وردت في استخراج النص من ملف PDF.</p>\n', '');
+            out = out.replace(/async function boot\(\)\{[\s\S]*?\}boot\(\);/, autoOpen1444 ? "renderHome();openQuiz('edu1444');" : 'renderHome();');
             return out;
           }
 
-          fs.mkdirSync('_site', { recursive: true });
-          fs.writeFileSync('_site/index.html', makePage(parsed), 'utf8');
-          fs.writeFileSync('_site/preview-1444.html', makePage({ groups: [cleanGroup], total: cleanGroup.count }, true), 'utf8');
-          console.log('Built main site and direct 1444 preview with', clean1444.count, 'cleaned questions');
+          fs.mkdirSync('_site',{recursive:true});
+          fs.writeFileSync('_site/index.html',makePage(parsed),'utf8');
+          fs.writeFileSync('_site/preview-1444.html',makePage({groups:[cleanGroup],total:cleanGroup.count},true),'utf8');
+          console.log(`Built ${parsed.total} questions total; specialty: ${specialtyTotal} in 14 tests.`);
           NODE
 
       - name: Setup Pages
