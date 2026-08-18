@@ -4,206 +4,42 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,user-scalable=yes">
 <meta name="theme-color" content="#0f766e">
-<title>اختبارات الرخصة المهنية - التربوي العام</title>
+<title>اختبارات الرخصة المهنية</title>
 <style>
-:root{
-  --bg:#f5f7fb;--card:#fff;--text:#172033;--muted:#667085;--brand:#0f766e;
-  --brand2:#14b8a6;--line:#e6e9ef;--good:#15803d;--bad:#b91c1c;
-  --soft:#eef8f7;--shadow:0 8px 24px rgba(15,23,42,.06)
-}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,Arial,sans-serif;line-height:1.7}
-button{font:inherit}
-.app{max-width:920px;margin:auto;padding:16px 14px 90px}
-.hero{background:linear-gradient(135deg,#0f766e,#115e59);color:#fff;border-radius:22px;padding:23px 20px;box-shadow:var(--shadow);margin-bottom:16px}
-.hero h1{margin:0 0 6px;font-size:clamp(24px,5vw,34px)}
-.hero p{margin:0;opacity:.92}
-.pill{display:inline-block;margin-top:12px;padding:6px 11px;border-radius:999px;background:rgba(255,255,255,.14);font-weight:800}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:13px}
-.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:var(--shadow)}
-.card h2{margin:0;font-size:19px}.muted{color:var(--muted);font-size:13px}
-.meta{display:flex;gap:7px;flex-wrap:wrap;margin:11px 0}
-.badge{background:var(--soft);color:var(--brand);border-radius:999px;padding:4px 9px;font-size:12px;font-weight:800}
-.progress{height:8px;background:#edf0f4;border-radius:99px;overflow:hidden;margin:10px 0 12px}
-.progress span{display:block;height:100%;background:var(--brand2);width:0}
-.primary,.secondary,.danger{border:0;border-radius:12px;padding:11px 14px;font-weight:800;cursor:pointer}
-.primary{background:var(--brand);color:#fff}.secondary{background:#edf2f7;color:#263244}.danger{background:#fff1f2;color:#b91c1c}
-.card .primary{width:100%}
-.hidden{display:none!important}
-.top{position:sticky;top:0;z-index:10;padding:8px 0 10px;background:rgba(245,247,251,.95);backdrop-filter:blur(10px)}
-.topinner{display:flex;gap:10px;align-items:center;justify-content:space-between}
-.top h2{margin:0;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.stats{font-size:12px;color:var(--muted);white-space:nowrap}
-.qcard{background:#fff;border:1px solid var(--line);border-radius:18px;padding:17px;margin:12px 0;box-shadow:var(--shadow)}
-.qhead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:10px}
-.qnum{min-width:38px;height:38px;display:grid;place-items:center;border-radius:11px;background:#eef2f7;font-weight:900}
-.qtext{font-size:17px;font-weight:750;line-height:1.85;flex:1}
-.opts{display:grid;gap:8px}
-.opt{display:flex;gap:10px;align-items:flex-start;text-align:right;width:100%;border:1px solid #d9dee7;background:#fff;border-radius:13px;padding:11px 12px;cursor:pointer;color:#263244}
-.opt .letter{display:grid;place-items:center;min-width:30px;height:30px;border-radius:9px;background:#f1f5f9;font-weight:900}
-.opt.selected{border-color:var(--brand);background:#ecfdf9;box-shadow:0 0 0 1px var(--brand) inset}
-.opt.correct{border-color:#86efac;background:#dcfce7;color:#166534}
-.opt.wrong{border-color:#fca5a5;background:#fee2e2;color:#991b1b}
-.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:18px 0}
-.result{background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px;margin:16px 0;box-shadow:var(--shadow)}
-.score{font-size:38px;font-weight:950;color:var(--brand)}
-.resultgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
-.rbox{background:#f8fafc;border-radius:13px;padding:11px;text-align:center}.rbox b{display:block;font-size:21px}
-.note{font-size:12px;color:var(--muted);margin-top:12px}
-@media(max-width:600px){
-  .actions{grid-template-columns:1fr}
-  .qtext{font-size:16px}
-  .resultgrid{grid-template-columns:1fr 1fr 1fr}
-}
+:root{--bg:#f5f7fb;--card:#fff;--text:#172033;--muted:#667085;--brand:#0f766e;--brand2:#14b8a6;--line:#e6e9ef;--soft:#eef8f7;--shadow:0 8px 24px rgba(15,23,42,.06)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,Arial,sans-serif;line-height:1.7}button{font:inherit}.app{max-width:920px;margin:auto;padding:16px 14px 90px}.hero{background:linear-gradient(135deg,#0f766e,#115e59);color:#fff;border-radius:22px;padding:23px 20px;box-shadow:var(--shadow);margin-bottom:16px}.hero h1{margin:0 0 6px;font-size:clamp(24px,5vw,34px)}.hero p{margin:0;opacity:.92}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:13px}.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:var(--shadow)}.card h2{margin:0;font-size:19px}.muted{color:var(--muted);font-size:13px}.meta{display:flex;gap:7px;flex-wrap:wrap;margin:11px 0}.badge{background:var(--soft);color:var(--brand);border-radius:999px;padding:4px 9px;font-size:12px;font-weight:800}.progress{height:8px;background:#edf0f4;border-radius:99px;overflow:hidden;margin:10px 0 12px}.progress span{display:block;height:100%;background:var(--brand2);width:0}.primary,.secondary,.danger{border:0;border-radius:12px;padding:11px 14px;font-weight:800;cursor:pointer}.primary{background:var(--brand);color:#fff}.secondary{background:#edf2f7;color:#263244}.danger{background:#fff1f2;color:#b91c1c}.card .primary{width:100%}.hidden{display:none!important}.top{position:sticky;top:0;z-index:10;padding:8px 0 10px;background:rgba(245,247,251,.95);backdrop-filter:blur(10px)}.topinner{display:flex;gap:10px;align-items:center;justify-content:space-between}.top h2{margin:0;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.stats{font-size:12px;color:var(--muted);white-space:nowrap}.qcard{background:#fff;border:1px solid var(--line);border-radius:18px;padding:17px;margin:12px 0;box-shadow:var(--shadow)}.qhead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:10px}.qnum{min-width:38px;height:38px;display:grid;place-items:center;border-radius:11px;background:#eef2f7;font-weight:900}.qtext{font-size:17px;font-weight:750;line-height:1.85;flex:1;white-space:pre-line}.qimg{display:block;width:100%;height:auto;border-radius:12px;margin:10px 0 13px;border:1px solid #e5e7eb}.opts{display:grid;gap:8px}.opt{display:flex;gap:10px;align-items:flex-start;text-align:right;width:100%;border:1px solid #d9dee7;background:#fff;border-radius:13px;padding:11px 12px;cursor:pointer;color:#263244}.opt .letter{display:grid;place-items:center;min-width:30px;height:30px;border-radius:9px;background:#f1f5f9;font-weight:900}.opt.selected{border-color:var(--brand);background:#ecfdf9;box-shadow:0 0 0 1px var(--brand) inset}.opt.correct{border-color:#86efac;background:#dcfce7;color:#166534}.opt.wrong{border-color:#fca5a5;background:#fee2e2;color:#991b1b}.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:18px 0}.result{background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px;margin:16px 0;box-shadow:var(--shadow)}.score{font-size:38px;font-weight:950;color:var(--brand)}.resultgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.rbox{background:#f8fafc;border-radius:13px;padding:11px;text-align:center}.rbox b{display:block;font-size:21px}.compact-hint{font-size:12px;color:var(--muted);margin:0 0 10px}.section-title{grid-column:1/-1;margin:14px 2px 0;font-size:20px;color:#263244}@media(max-width:600px){.actions{grid-template-columns:1fr}.qtext{font-size:16px}.resultgrid{grid-template-columns:1fr 1fr 1fr}}
 </style>
 </head>
 <body>
 <div class="app">
-  <section id="home">
-    <div class="hero">
-      <h1>اختبارات الرخصة المهنية</h1>
-      <p>حل الأسئلة نصيًا، واحصل على النتيجة بعد إنهاء الاختبار.</p>
-      <span class="pill" id="totalPill"></span>
-    </div>
-    <div id="cards" class="grid"></div>
-    <p class="note">الأسئلة ومفاتيح الإجابة مستخرجة من ملف التجميعات المرفق. قد تظهر بعض الكلمات كما وردت في استخراج النص من ملف PDF.</p>
-  </section>
-
-  <section id="quiz" class="hidden">
-    <div class="top">
-      <div class="topinner">
-        <button class="secondary" onclick="goHome()">رجوع</button>
-        <div style="min-width:0;flex:1">
-          <h2 id="quizTitle"></h2>
-          <div class="stats" id="quizStats"></div>
-        </div>
-      </div>
-    </div>
-    <div id="questions"></div>
-    <div class="actions">
-      <button class="primary" onclick="submitQuiz()">إنهاء وتصحيح الاختبار</button>
-      <button class="danger" onclick="resetQuiz()">مسح الإجابات</button>
-    </div>
-    <div id="result" class="result hidden"></div>
-  </section>
+<section id="home">
+  <div class="hero"><h1>اختبارات الرخصة المهنية</h1><p>اختر الاختبار، أجب عن الأسئلة، ثم اعرض النتيجة.</p></div>
+  <div id="cards" class="grid"></div>
+</section>
+<section id="quiz" class="hidden">
+  <div class="top"><div class="topinner"><button class="secondary" onclick="goHome()">رجوع</button><div style="min-width:0;flex:1"><h2 id="quizTitle"></h2><div class="stats" id="quizStats"></div></div></div></div>
+  <div id="questions"></div>
+  <div class="actions"><button class="primary" onclick="submitQuiz()">إنهاء وتصحيح الاختبار</button><button class="danger" onclick="resetQuiz()">مسح الإجابات</button></div>
+  <div id="result" class="result hidden"></div>
+</section>
 </div>
-
 <script src="https://cdn.jsdelivr.net/npm/pako@2.1.0/dist/pako.min.js"></script>
-<script src="data/c1.js"></script>
-<script src="data/c2.js"></script>
-<script src="data/c3.js"></script>
-<script src="data/c4.js"></script>
-<script src="data/c5.js"></script>
+<script src="data/c1.js"></script><script src="data/c2.js"></script><script src="data/c3.js"></script><script src="data/c4.js"></script><script src="data/c5.js"></script>
+<script src="data/specialty1.js"></script><script src="data/specialty2.js"></script><script src="data/specialty3.js"></script><script src="data/specialty4a.js"></script><script src="data/specialty4b.js"></script><script src="data/specialty4c.js"></script>
+<script src="data/specialty5.js"></script><script src="data/specialty6.js"></script><script src="data/specialty7.js"></script><script src="data/specialty8.js"></script><script src="data/specialty9.js"></script><script src="data/specialty10.js"></script><script src="data/specialty11.js"></script><script src="data/specialty12.js"></script><script src="data/specialty13.js"></script><script src="data/specialty14.js"></script>
 <script>
-let DATA={groups:[],total:0};
-const LETTERS=['أ','ب','ج','د'];
-let current=null, submitted=false;
-const key=id=>'muhannad_quiz_'+id;
-
-function load(id){try{return JSON.parse(localStorage.getItem(key(id))||'{}')}catch(e){return {}}}
-function save(id,a){localStorage.setItem(key(id),JSON.stringify(a))}
-function answered(g){const a=load(g.id);return g.questions.filter(q=>a[q.n]).length}
-
-function renderHome(){
-  document.getElementById('totalPill').textContent=DATA.total+' سؤال';
-  const c=document.getElementById('cards'); c.innerHTML='';
-  DATA.groups.forEach(g=>{
-    const n=answered(g),pct=Math.round(n/g.count*100);
-    const d=document.createElement('div');d.className='card';
-    d.innerHTML=`<h2>${g.title}</h2><div class="muted">${g.subtitle||''}</div>
-      <div class="meta"><span class="badge">${g.count} سؤال</span><span class="badge">أجبت ${n}</span></div>
-      <div class="progress"><span style="width:${pct}%"></span></div>
-      <button class="primary" onclick="openQuiz('${g.id}')">${n?'متابعة الاختبار':'بدء الاختبار'}</button>`;
-    c.appendChild(d);
-  });
-}
-function openQuiz(id){
-  current=DATA.groups.find(g=>g.id===id); submitted=false;
-  document.getElementById('home').classList.add('hidden');
-  document.getElementById('quiz').classList.remove('hidden');
-  document.getElementById('result').classList.add('hidden');
-  document.getElementById('quizTitle').textContent=current.title;
-  renderQuestions(); window.scrollTo({top:0,behavior:'smooth'});
-}
-function renderQuestions(){
-  const a=load(current.id),wrap=document.getElementById('questions');wrap.innerHTML='';
-  current.questions.forEach(q=>{
-    const c=document.createElement('div');c.className='qcard';c.id='q'+q.n;
-    c.innerHTML=`<div class="qhead"><div class="qtext">${escapeHtml(q.text)}</div><div class="qnum">${q.n}</div></div>
-      <div class="opts">${q.options.map(o=>`<button class="opt ${a[q.n]===o.key?'selected':''}" data-q="${q.n}" data-k="${o.key}" onclick="choose(${q.n},'${o.key}',this)"><span class="letter">${o.key}</span><span>${escapeHtml(o.text)}</span></button>`).join('')}</div>`;
-    wrap.appendChild(c);
-  });
-  updateStats();
-}
-function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
-function choose(n,k,btn){
-  if(submitted)return;
-  const a=load(current.id);a[n]=k;save(current.id,a);
-  btn.parentElement.querySelectorAll('.opt').forEach(x=>x.classList.remove('selected'));
-  btn.classList.add('selected'); updateStats();
-}
-function updateStats(){
-  const a=load(current.id),n=current.questions.filter(q=>a[q.n]).length;
-  document.getElementById('quizStats').textContent=`تمت الإجابة عن ${n} من ${current.count}`;
-}
-function submitQuiz(){
-  const a=load(current.id); let correct=0,wrong=0,blank=0;submitted=true;
-  current.questions.forEach(q=>{
-    const chosen=a[q.n]; if(!chosen)blank++; else if(chosen===q.answer)correct++; else wrong++;
-    const card=document.getElementById('q'+q.n);
-    card.querySelectorAll('.opt').forEach(b=>{
-      const k=b.dataset.k;
-      b.classList.remove('correct','wrong');
-      if(k===q.answer)b.classList.add('correct');
-      else if(k===chosen)b.classList.add('wrong');
-    });
-  });
-  const pct=Math.round(correct/current.count*100);
-  const r=document.getElementById('result');r.classList.remove('hidden');
-  r.innerHTML=`<div class="muted">النتيجة</div><div class="score">${pct}%</div>
-    <div class="resultgrid">
-      <div class="rbox"><b>${correct}</b><span>صحيح</span></div>
-      <div class="rbox"><b>${wrong}</b><span>خطأ</span></div>
-      <div class="rbox"><b>${blank}</b><span>بدون إجابة</span></div>
-    </div>
-    <p class="note">تم إظهار الإجابة الصحيحة باللون الأخضر، وإجابتك الخاطئة باللون الأحمر.</p>`;
-  r.scrollIntoView({behavior:'smooth',block:'center'});
-}
-function resetQuiz(){
-  if(!current)return;
-  if(confirm('هل تريد مسح جميع إجابات هذا الاختبار؟')){
-    localStorage.removeItem(key(current.id));submitted=false;
-    document.getElementById('result').classList.add('hidden');renderQuestions();
-  }
-}
-function goHome(){
-  current=null;submitted=false;
-  document.getElementById('quiz').classList.add('hidden');
-  document.getElementById('home').classList.remove('hidden');
-  renderHome();window.scrollTo({top:0,behavior:'smooth'});
-}
-async function boot(){
-  try{
-    const bin=atob(window.QZ_B64||'');
-    const bytes=new Uint8Array(bin.length);
-    for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);
-    let text='';
-    try{
-      if(typeof DecompressionStream==='undefined') throw new Error('DecompressionStream unavailable');
-      const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
-      text=await new Response(stream).text();
-    }catch(nativeErr){
-      if(!window.pako) throw nativeErr;
-      text=new TextDecoder('utf-8').decode(window.pako.ungzip(bytes));
-    }
-    DATA=JSON.parse(text);
-    renderHome();
-  }catch(e){
-    document.getElementById('cards').innerHTML='<div class="card"><h2>تعذر تحميل الأسئلة</h2><p>حدث الصفحة مرة أخرى. إذا استمرت المشكلة افتح الرابط مباشرة في Safari.</p></div>';
-    console.error(e);
-  }
-}
-boot();
+let DATA={groups:[],total:0};const LETTERS=['أ','ب','ج','د'];let current=null,submitted=false;const key=id=>'muhannad_quiz_'+id;
+function load(id){try{return JSON.parse(localStorage.getItem(key(id))||'{}')}catch(e){return {}}}function save(id,a){localStorage.setItem(key(id),JSON.stringify(a))}function answered(g){const a=load(g.id);return g.questions.filter(q=>a[q.n]).length}
+function renderHome(){const c=document.getElementById('cards');c.innerHTML='';const general=DATA.groups.filter(g=>!String(g.id).startsWith('specialty'));const spec=DATA.groups.filter(g=>String(g.id).startsWith('specialty'));function addGroup(g){const n=answered(g),pct=g.count?Math.round(n/g.count*100):0,d=document.createElement('div');d.className='card';d.innerHTML=`<h2>${escapeHtml(g.title)}</h2><div class="muted">${escapeHtml(g.subtitle||'')}</div><div class="meta"><span class="badge">${g.count} سؤال</span><span class="badge">أجبت ${n}</span></div><div class="progress"><span style="width:${pct}%"></span></div><button class="primary" onclick="openQuiz('${g.id}')">${n?'متابعة الاختبار':'بدء الاختبار'}</button>`;c.appendChild(d)}general.forEach(addGroup);if(spec.length){const h=document.createElement('h2');h.className='section-title';h.textContent='اختبارات التخصص - كيمياء';c.appendChild(h);spec.forEach(addGroup)}}
+function openQuiz(id){current=DATA.groups.find(g=>g.id===id);submitted=false;document.getElementById('home').classList.add('hidden');document.getElementById('quiz').classList.remove('hidden');document.getElementById('result').classList.add('hidden');document.getElementById('quizTitle').textContent=current.title;renderQuestions();window.scrollTo({top:0,behavior:'smooth'})}
+function renderQuestions(){const a=load(current.id),wrap=document.getElementById('questions');wrap.innerHTML='';current.questions.forEach(q=>{const c=document.createElement('div');c.className='qcard';c.id='q'+q.n;const image=q.image?`<img class="qimg" src="${q.image}" alt="السؤال ${q.n}">`:'';const hint=q.compact?'<p class="compact-hint">الخيارات ظاهرة ضمن نص السؤال؛ اختر حرف الإجابة أدناه.</p>':'';c.innerHTML=`<div class="qhead"><div class="qtext">${escapeHtml(q.text)}</div><div class="qnum">${q.n}</div></div>${image}${hint}<div class="opts">${q.options.map(o=>`<button class="opt ${a[q.n]===o.key?'selected':''}" data-k="${o.key}" onclick="choose(${q.n},'${o.key}',this)"><span class="letter">${o.key}</span><span>${escapeHtml(o.text||('اختيار '+o.key))}</span></button>`).join('')}</div>`;wrap.appendChild(c)});updateStats()}
+function escapeHtml(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function choose(n,k,btn){if(submitted)return;const a=load(current.id);a[n]=k;save(current.id,a);btn.parentElement.querySelectorAll('.opt').forEach(x=>x.classList.remove('selected'));btn.classList.add('selected');updateStats()}
+function updateStats(){const a=load(current.id),n=current.questions.filter(q=>a[q.n]).length;document.getElementById('quizStats').textContent=`تمت الإجابة عن ${n} من ${current.count}`}
+function submitQuiz(){const a=load(current.id);let correct=0,wrong=0,blank=0;submitted=true;current.questions.forEach(q=>{const chosen=a[q.n];if(!chosen)blank++;else if(chosen===q.answer)correct++;else wrong++;const card=document.getElementById('q'+q.n);card.querySelectorAll('.opt').forEach(b=>{const k=b.dataset.k;b.classList.remove('correct','wrong');if(k===q.answer)b.classList.add('correct');else if(k===chosen)b.classList.add('wrong')})});const pct=Math.round(correct/current.count*100),r=document.getElementById('result');r.classList.remove('hidden');r.innerHTML=`<div class="muted">النتيجة</div><div class="score">${pct}%</div><div class="resultgrid"><div class="rbox"><b>${correct}</b><span>صحيح</span></div><div class="rbox"><b>${wrong}</b><span>خطأ</span></div><div class="rbox"><b>${blank}</b><span>بدون إجابة</span></div></div>`;r.scrollIntoView({behavior:'smooth',block:'center'})}
+function resetQuiz(){if(!current)return;if(confirm('هل تريد مسح جميع إجابات هذا الاختبار؟')){localStorage.removeItem(key(current.id));submitted=false;document.getElementById('result').classList.add('hidden');renderQuestions()}}
+function goHome(){current=null;submitted=false;document.getElementById('quiz').classList.add('hidden');document.getElementById('home').classList.remove('hidden');renderHome();window.scrollTo({top:0,behavior:'smooth'})}
+function compactGroups(){return(window.SPEC_COMPACT||[]).map(g=>({...g,questions:g.questions.map((r,i)=>({n:i+1,text:String(r[0]||'').replace(/\s*\|\s*/g,'\n'),options:LETTERS.map(k=>({key:k,text:'اختيار '+k})),answer:r[1],source:r[2],source_q:r[3],compact:true}))}))}
+async function boot(){try{const bin=atob(window.QZ_B64||''),bytes=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);let text='';try{if(typeof DecompressionStream==='undefined')throw new Error('native unavailable');const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));text=await new Response(stream).text()}catch(e){if(!window.pako)throw e;text=new TextDecoder('utf-8').decode(window.pako.ungzip(bytes))}DATA=JSON.parse(text);DATA.groups.push(...(window.SPEC_GROUPS||[]),...compactGroups());DATA.total=DATA.groups.reduce((s,g)=>s+(g.count||g.questions.length),0);renderHome()}catch(e){document.getElementById('cards').innerHTML='<div class="card"><h2>تعذر تحميل الأسئلة</h2><p>حدّث الصفحة مرة أخرى.</p></div>';console.error(e)}}boot();
 </script>
-</body>
-</html>
+</body></html>
