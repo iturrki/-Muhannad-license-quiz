@@ -1,1 +1,0 @@
-Apply clearer back-to-home button in category pages.
